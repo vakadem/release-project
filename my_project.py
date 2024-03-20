@@ -13,6 +13,8 @@ class GameSprite(sprite.Sprite):
         self.rect = self.image.get_rect()
         self.rect.x = x
         self.rect.y = y
+        self.rect.height = 37
+        self.rect.width = 37
     def reset(self):
         window.blit(self.image, (self.rect.x, self.rect.y))
 
@@ -74,7 +76,7 @@ class Enemy(GameSprite):
             self.rect.x += self.speed
         else:
             self.rect.x -= self.speed
-        if self.rect.x <= 140:
+        if self.rect.x <= 200:
             self.direction = 'right'
         if self.rect.x >= 450:
             self.direction = 'left'
@@ -130,10 +132,10 @@ sound_kick = mixer.Sound("kick.ogg")
 background = transform.scale(image.load("galaxy.jpg"), (win_width, win_hight))
 player = Player("hero.png", 0, 225, 4, 50, 50)
 enemy_1 = Enemy("cyborg.png", 150, 50, randint(8, 12), 50, 50, 'down')
-enemy_2 = Enemy("cyborg.png", 300, 50, randint(3, 5), 50, 50, 'up')
+enemy_2 = Enemy("cyborg.png", 300, 50, randint(3, 4), 50, 50, 'up')
 enemy_2_5 = Enemy("cyborg.png", 300, 400, randint(3, 5), 50, 50, 'up')
-enemy_3 = Enemy("cyborg.png", 450, 450, randint(5, 7), 50, 50, 'down')
-enemy_4 = Enemy("cyborg.png", 150, 0, randint(8, 10), 50, 50, 'right')
+enemy_3 = Enemy("cyborg.png", 450, 450, 5, 50, 50, 'down')
+enemy_4 = Enemy("cyborg.png", 220, 0, randint(7, 8), 50, 50, 'right')
 enemy_5 = Enemy("cyborg.png", 450, 450, randint(8, 10), 50, 50, 'left')
 finish_gold = GameSprite("treasure.png", 650, 400, 4, 50, 50)
 wall1 = Wall(5, 350, 130, 0)
@@ -146,7 +148,7 @@ wall_key1 = Wall_key(130, 5, 0, 50, 255, 255, 0)
 wall_key2 = Wall_key(5, 100, 580, 0, 255, 0, 0)
 key1 = GameSprite("key1.png", 150, 5, 0, 65, 30)
 key2 = GameSprite("key2.png", 20, 0, 0, 70, 35)
-
+flag = GameSprite("flag.png", 70, 70, 0, 50, 50)
 
 game = True
 clock = time.Clock()
@@ -184,6 +186,7 @@ while game:
         wall_key2.reset()
         key1.reset()
         key2.reset()
+        flag.reset()
         player.move()
         enemy_1.move_1()
         enemy_2.move_2()
@@ -198,9 +201,7 @@ while game:
             window.blit(txt_lose, [250, 350])
         if sprite.collide_rect(player, finish_gold):
             sound_gold.play()
-            finish_gold.visible = False
-            finish = True
-            window.blit(txt_win, [250, 350])
+            finish_gold.rect.x = -300
         if sprite.collide_rect(player, key1):
             wall_key1.rect.x = -300
             key1.rect.x = -300
