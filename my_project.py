@@ -150,6 +150,10 @@ key1 = GameSprite("key1.png", 150, 5, 0, 65, 30)
 key2 = GameSprite("key2.png", 20, 0, 0, 70, 35)
 flag = GameSprite("flag.png", 70, 70, 0, 50, 50)
 
+gold = 0
+i_key1 = 0
+i_key2 = 0
+
 game = True
 clock = time.Clock()
 FPS = 60
@@ -184,9 +188,6 @@ while game:
         wall6.reset()
         wall_key1.reset()
         wall_key2.reset()
-        key1.reset()
-        key2.reset()
-        flag.reset()
         player.move()
         enemy_1.move_1()
         enemy_2.move_2()
@@ -201,14 +202,24 @@ while game:
             window.blit(txt_lose, [250, 350])
         if sprite.collide_rect(player, finish_gold):
             sound_gold.play()
-            finish_gold.rect.x = -300
+            gold = gold + 1
+        if gold == 0:
+            finish_gold.reset()
+        if gold >= 1:
+            flag.reset()
+            if sprite.collide_rect(player, flag):
+                finish = True
+                window.blit(txt_win, [250, 350])
         if sprite.collide_rect(player, key1):
+            i_key1 = i_key1 + 1
             wall_key1.rect.x = -300
-            key1.rect.x = -300
+        if i_key1 == 0:
+            key1.reset()
         if sprite.collide_rect(player, key2):
+            i_key2 = i_key2 + 1
             wall_key2.rect.x = -300
-            key2.rect.x = -300
-            
+        if i_key2 == 0:
+            key2.reset()
         for walls_obj in walls:
 
             if sprite.collide_rect(player, walls_obj):
